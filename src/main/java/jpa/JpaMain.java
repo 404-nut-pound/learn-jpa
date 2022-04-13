@@ -13,17 +13,36 @@ public class JpaMain {
 
     EntityTransaction tx = em.getTransaction();
 
-    Member member = new Member();
-    member.setId(1L);
-    member.setName("hskim");
-
     tx.begin();
 
-    em.persist(member);
+    try {
+      Member member = new Member();
+      member.setId(1L);
+      member.setName("hskim");
+      // insert
+      em.persist(member);
 
-    tx.commit();
+      // select
+      Member findMember = em.find(Member.class, 1L);
 
-    em.close();
+      System.out.println("findMemeber => " + findMember.toString());
+
+      // update
+      findMember.setName("404-nut-pound");
+
+      findMember = em.find(Member.class, 1L);
+
+      System.out.println("findMemeber after update => " + findMember.toString());
+
+      // delete
+      em.remove(member);
+
+      tx.commit();
+    } catch (Exception e) {
+      tx.rollback();
+    } finally {
+      em.close();
+    }
 
     emf.close();
   }
