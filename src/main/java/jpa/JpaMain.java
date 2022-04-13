@@ -1,5 +1,7 @@
 package jpa;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
@@ -22,20 +24,25 @@ public class JpaMain {
       // insert
       em.persist(member);
 
+      List<Member> memberList = em.createQuery("select m from Member as m", Member.class).setFirstResult(1)
+          .setMaxResults(10).getResultList();
+
+      System.out.println("memberList - " + memberList);
+
       // select
-      Member findMember = em.find(Member.class, 1L);
-
-      System.out.println("findMemeber => " + findMember.toString());
-
-      // update
-      findMember.setName("404-nut-pound");
-
-      findMember = em.find(Member.class, 1L);
-
-      System.out.println("findMemeber after update => " + findMember.toString());
-
-      // delete
-      em.remove(member);
+//      Member findMember = em.find(Member.class, 1L);
+//
+//      System.out.println("findMemeber => " + findMember.toString());
+//
+//      // update
+//      findMember.setName("404-nut-pound");
+//
+//      findMember = em.find(Member.class, 1L);
+//
+//      System.out.println("findMemeber after update => " + findMember.toString());
+//
+//      // delete
+//      em.remove(member);
 
       tx.commit();
     } catch (Exception e) {
