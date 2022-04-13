@@ -24,7 +24,7 @@ public class JpaMain {
       // insert
       em.persist(member);
 
-      List<Member> memberList = em.createQuery("select m from Member as m", Member.class).setFirstResult(1)
+      List<Member> memberList = em.createQuery("select m from Member as m", Member.class).setFirstResult(0)
           .setMaxResults(10).getResultList();
 
       System.out.println("memberList - " + memberList);
