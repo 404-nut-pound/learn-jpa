@@ -22,4 +22,9 @@ public class Member {
   private Team team;
   @Column(name = "user_name")
   private String userName;
+
+  public void setTeam(Team team) {
+    this.team = team;
+    team.getMemberList().add(this);
+  }
 }

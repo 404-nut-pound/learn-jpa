@@ -5,6 +5,9 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 
+import jpa.team.Member;
+import jpa.team.Team;
+
 public class JpaMain {
   public static void main(String[] args) {
     EntityManagerFactory emf = Persistence.createEntityManagerFactory("hello");
@@ -42,6 +45,18 @@ public class JpaMain {
       //
       // // delete
       // em.remove(member);
+
+      Team team = new Team();
+      team.setName("TeamA");
+      em.persist(team);
+      Member member = new Member();
+      member.setUserName("member1");
+      // 역방향(주인이 아닌 방향)만 연관관계 설정
+      // team.getMemberList().add(member); // 매핑 편의를 위해 Member.setTeam에 해당 코드를 위치
+      // 연관관계의 주인에 값 설정
+      member.setTeam(team); // **
+      // 양방향 매핑을 사용할 경우 toString()과 같은 무한 루프를 조심하자
+      em.persist(member);
 
       tx.commit();
     } catch (Exception e) {
