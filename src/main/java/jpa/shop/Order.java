@@ -1,4 +1,4 @@
-package jpa.vo;
+package jpa.shop;
 
 import java.time.LocalDateTime;
 
@@ -19,8 +19,8 @@ public class Order {
   @GeneratedValue
   @Column(name = "order_id")
   private Long id;
-  @Column(name = "member_id")
-  private Long memberId;
+  @Column(name = "customer_id")
+  private Long customerId;
   @Column(name = "order_date_time")
   private LocalDateTime orderDateTime;
   private OrderStatus status;

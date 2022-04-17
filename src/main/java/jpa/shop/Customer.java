@@ -1,4 +1,4 @@
-package jpa.vo;
+package jpa.shop;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,7 +9,7 @@ import lombok.Data;
 
 @Entity
 @Data
-public class Member {
+public class Customer {
 
 //  @Id
 //  private Long id;

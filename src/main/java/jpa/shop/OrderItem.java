@@ -1,4 +1,4 @@
-package jpa.vo;
+package jpa.shop;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
