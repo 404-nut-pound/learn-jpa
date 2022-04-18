@@ -7,13 +7,16 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.ManyToMany;
 
 import lombok.Data;
 
 @Entity
+@Inheritance(strategy = InheritanceType.JOINED) // 기본 값 단일 테이블
 @Data
-public class Item {
+public abstract class Item {
 
   @Id
   @GeneratedValue
