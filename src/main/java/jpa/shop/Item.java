@@ -1,9 +1,13 @@
 package jpa.shop;
 
+import java.util.Collections;
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 
 import lombok.Data;
 
@@ -19,4 +23,6 @@ public class Item {
   private int price;
   @Column(name = "stock_quantity")
   private int stockQuantity;
+  @ManyToMany(mappedBy = "itemList")
+  private List<Category> categoryList = Collections.emptyList();
 }
