@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -15,6 +16,7 @@ import lombok.Data;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED) // 기본 값 단일 테이블
+@DiscriminatorColumn(name = "DTYPE") // 구분자 컬럼 추가, 기본 값 DTYPE
 @Data
 public abstract class Item {
 
