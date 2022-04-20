@@ -1,13 +1,9 @@
 package jpa;
 
-import java.util.List;
-
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
-
-import jpa.shop.Customer;
 
 public class JpaMain {
   public static void main(String[] args) {
@@ -20,32 +16,32 @@ public class JpaMain {
     tx.begin();
 
     try {
-      Customer customer = new Customer();
-      customer.setId(1L);
-      customer.setName("hskim");
-
-      // insert
-      em.persist(customer);
-
-      List<Customer> memberList = em.createQuery("select m from Member as m", Customer.class).setFirstResult(0)
-          .setMaxResults(10).getResultList();
-
-      System.out.println("memberList - " + memberList);
-
-      // select
-      Customer findMember = em.find(Customer.class, 1L);
-
-      System.out.println("findMemeber => " + findMember.toString());
-
-      // update
-      findMember.setName("404-nut-pound");
-
-      findMember = em.find(Customer.class, 1L);
-
-      System.out.println("findMemeber after update => " + findMember.toString());
-
-      // delete
-      em.remove(customer);
+//      Customer customer = new Customer();
+//      customer.setId(1L);
+//      customer.setName("hskim");
+//
+//      // insert
+//      em.persist(customer);
+//
+//      List<Customer> memberList = em.createQuery("select m from Member as m", Customer.class).setFirstResult(0)
+//          .setMaxResults(10).getResultList();
+//
+//      System.out.println("memberList - " + memberList);
+//
+//      // select
+//      Customer findMember = em.find(Customer.class, 1L);
+//
+//      System.out.println("findMemeber => " + findMember.toString());
+//
+//      // update
+//      findMember.setName("404-nut-pound");
+//
+//      findMember = em.find(Customer.class, 1L);
+//
+//      System.out.println("findMemeber after update => " + findMember.toString());
+//
+//      // delete
+//      em.remove(customer);
 
 //      Team team = new Team();
 //      team.setName("TeamA");

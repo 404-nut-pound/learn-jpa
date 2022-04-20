@@ -1,6 +1,7 @@
 package jpa.shop;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
@@ -19,6 +20,6 @@ public class Delivery {
   private String street;
   private String zipcode;
   private DeliveryStatus status;
-  @OneToOne(mappedBy = "delivery")
+  @OneToOne(mappedBy = "delivery", fetch = FetchType.LAZY)
   private Order order;
 }

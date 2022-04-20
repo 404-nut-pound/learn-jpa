@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
@@ -28,6 +29,6 @@ public abstract class Item {
   private int price;
   @Column(name = "stock_quantity")
   private int stockQuantity;
-  @ManyToMany(mappedBy = "itemList")
+  @ManyToMany(mappedBy = "itemList", fetch = FetchType.LAZY)
   private List<Category> categoryList = Collections.emptyList();
 }
