@@ -1,7 +1,6 @@
 package jpa.team;
 
 import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -26,13 +25,13 @@ public class Member {
   @Column(name = "user_name")
   private String userName;
   @Embedded
-  @AttributeOverrides({ @AttributeOverride(name = "city", column = @Column(name = "work_city")),
-      @AttributeOverride(name = "street", column = @Column(name = "work_street")),
-      @AttributeOverride(name = "zipcode", column = @Column(name = "work_zipcode")), })
+//  @AttributeOverrides({ @AttributeOverride(name = "city", column = @Column(name = "work_city")),
+//      @AttributeOverride(name = "street", column = @Column(name = "work_street")),
+//      @AttributeOverride(name = "zipcode", column = @Column(name = "work_zipcode")), })
   private Address address;
-  private String city;
-  private String street;
-  private String zipcode;
+//  private String city;
+//  private String street;
+//  private String zipcode;
   @Embedded
   @AttributeOverride(name = "startDateTime", column = @Column(name = "work_start_datetime"))
   @AttributeOverride(name = "endDateTime", column = @Column(name = "work_end_datetime"))
