@@ -1,9 +1,11 @@
 package io.hskim.learnjpapart2.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -30,17 +32,21 @@ public class Category {
 
   private String name;
 
-  @ManyToMany
+  @ManyToMany(fetch = FetchType.LAZY)
   @JoinTable(name = "category_item" //
       , joinColumns = @JoinColumn(name = "category_id") //
       , inverseJoinColumns = @JoinColumn(name = "item_id")) //
-  private List<Item> itemList;
+  private List<Item> itemList = new ArrayList<>();
 
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "parent_id")
   private Category parent;
 
-  @OneToMany(mappedBy = "parent")
-  private List<Category> child;
+  @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY)
+  private List<Category> childList = new ArrayList<>();
 
+  public void addChildCategory(Category category) {
+    this.childList.add(category);
+    category.setParent(this);
+  }
 }

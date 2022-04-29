@@ -1,10 +1,12 @@
 package io.hskim.learnjpapart2.domain.item;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
@@ -33,6 +35,7 @@ public abstract class Item {
 
   private int stockQuantity;
 
-  @ManyToMany(mappedBy = "itemList")
-  private List<Category> categoryList;
+  @ManyToMany(mappedBy = "itemList", fetch = FetchType.LAZY)
+  // List 타입은 초기화를 미리 하는 것이 좋음
+  private List<Category> categoryList = new ArrayList<>();
 }
