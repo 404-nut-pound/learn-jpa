@@ -18,13 +18,15 @@ import io.hskim.learnjpapart2.exception.NotEnoughStockException;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE) // 상속 받는 클래스에 대해 테이블 전략 설정
 @DiscriminatorColumn(name = "dtype") // 상속 받는 클래스에 식별자 컬럼 설정, 기본 값 "DTYPE"
 @Data
 @Setter(value = AccessLevel.NONE)
-public abstract class Item {
+@SuperBuilder(toBuilder = true)
+public class Item {
 
   @Id
   @GeneratedValue
