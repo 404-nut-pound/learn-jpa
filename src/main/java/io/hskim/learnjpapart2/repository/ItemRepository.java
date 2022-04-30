@@ -1,18 +1,14 @@
 package io.hskim.learnjpapart2.repository;
 
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
-import org.springframework.stereotype.Repository;
-
 import io.hskim.learnjpapart2.domain.item.Item;
+import java.util.List;
+import javax.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
 
 @Repository
 @RequiredArgsConstructor
 public class ItemRepository {
-
   private final EntityManager em;
 
   public void insertItem(Item item) {

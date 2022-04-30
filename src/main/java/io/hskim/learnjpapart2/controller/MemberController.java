@@ -19,7 +19,7 @@ public class MemberController {
   private final MemberService memberService;
 
   @GetMapping(value = "/new")
-  public String getUserCreatForm(Model model) {
+  public String getCreateUserForm(Model model) {
     model.addAttribute("memberForm", MemberForm.builder().build());
 
     return "members/createMemberForm";
