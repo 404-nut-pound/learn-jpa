@@ -1,4 +1,4 @@
-package io.hskim.learnjpapart2.common;
+package io.hskim.learnjpapart2.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,4 +16,8 @@ public class CommonController {
     return "hello";
   }
 
+  @GetMapping(value = "/home")
+  public String getMethodName() {
+    return "home";
+  }
 }
