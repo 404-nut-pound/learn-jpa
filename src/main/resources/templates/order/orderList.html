@@ -11,7 +11,7 @@
             <div class="form-group mb-2">
               <input
                 type="text"
-                th:field="*{memberName}"
+                th:field="*{userName}"
                 class="form-control"
                 placeholder="회원명"
               />
@@ -20,7 +20,7 @@
               <select th:field="*{orderStatus}" class="form-control">
                 <option value="">주문상태</option>
                 <option
-                  th:each="status : ${T(jpabook.jpashop.domain.OrderStatus).values()}"
+                  th:each="status : ${T(io.hskim.learnjpapart2.domain.OrderStatus).values()}"
                   th:value="${status}"
                   th:text="${status}"
                 >
@@ -46,19 +46,19 @@
             </tr>
           </thead>
           <tbody>
-            <tr th:each="item : ${orders}">
-              <td th:text="${item.id}"></td>
-              <td th:text="${item.member.name}"></td>
-              <td th:text="${item.orderItems[0].item.name}"></td>
-              <td th:text="${item.orderItems[0].orderPrice}"></td>
-              <td th:text="${item.orderItems[0].count}"></td>
-              <td th:text="${item.status}"></td>
-              <td th:text="${item.orderDate}"></td>
+            <tr th:each="order : ${orderList}">
+              <td th:text="${order.id}"></td>
+              <td th:text="${order.member.name}"></td>
+              <td th:text="${order.orderItemList[0].item.name}"></td>
+              <td th:text="${order.orderItemList[0].orderPrice}"></td>
+              <td th:text="${order.orderItemList[0].orderCount}"></td>
+              <td th:text="${order.orderStatus}"></td>
+              <td th:text="${order.orderDateTime}"></td>
               <td>
                 <a
-                  th:if="${item.status.name() == 'ORDER'}"
+                  th:if="${order.orderStatus.name() == 'ORDER'}"
                   href="#"
-                  th:href="'javascript:cancel('+${item.id}+')'"
+                  th:href="'javascript:cancel('+${order.id}+')'"
                   class="btn btn-danger"
                 >
                   CANCEL
@@ -77,7 +77,7 @@
     function cancel(id) {
       var form = document.createElement('form')
       form.setAttribute('method', 'post')
-      form.setAttribute('action', '/orders/' + id + '/cancel')
+      form.setAttribute('action', '/order/' + id + '/cancel')
       document.body.appendChild(form)
       form.submit()
     }

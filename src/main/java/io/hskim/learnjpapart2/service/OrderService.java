@@ -1,8 +1,5 @@
 package io.hskim.learnjpapart2.service;
 
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import io.hskim.learnjpapart2.domain.Delivery;
 import io.hskim.learnjpapart2.domain.Member;
 import io.hskim.learnjpapart2.domain.Order;
@@ -11,7 +8,11 @@ import io.hskim.learnjpapart2.domain.item.Item;
 import io.hskim.learnjpapart2.repository.ItemRepository;
 import io.hskim.learnjpapart2.repository.MemberRepository;
 import io.hskim.learnjpapart2.repository.OrderRepository;
+import io.hskim.learnjpapart2.repository.OrderSearchDto;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional(readOnly = true)
@@ -32,9 +33,10 @@ public class OrderService {
 
     // 주문 상품 생성
     OrderItem orderItem = OrderItem.craeteOrderItem(
-        item,
-        item.getPrice(),
-        orderCount);
+      item,
+      item.getPrice(),
+      orderCount
+    );
 
     // 주문 정보 생성
     Order order = Order.createOrder(member, delivery, orderItem);
@@ -48,5 +50,9 @@ public class OrderService {
   @Transactional
   public void cancelOrder(Long orderId) {
     orderRepository.findOne(orderId).cancelOrder();
+  }
+
+  public List<Order> selectOrderList(OrderSearchDto orderSearchDto) {
+    return orderRepository.findAllByCondition(orderSearchDto);
   }
 }

@@ -2,9 +2,7 @@ package io.hskim.learnjpapart2.domain;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,10 +16,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
@@ -29,8 +28,9 @@ import lombok.Setter;
 @Data
 @Setter(value = AccessLevel.NONE)
 @Builder(toBuilder = true)
+@NoArgsConstructor
+@AllArgsConstructor
 public class Order {
-
   @Id
   @GeneratedValue
   @Column(name = "order_id")
@@ -42,8 +42,11 @@ public class Order {
   // 주로 외래키가 있는 쪽에 주도권 설정
   private Member member;
 
+  // 직접 초기화를 할 경우 builder 어노테이션이 관리하지 않음
+  // 아래 어노테이션으로 관리하도록 지정
+  @Builder.Default
   // cascade는 연관된 객체를 같이 조작해줌
-  @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
   private List<OrderItem> orderItemList = new ArrayList<>();
 
   @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -64,6 +67,11 @@ public class Order {
     member.getOrderList().add(this);
   }
 
+  public void addOrderItem(OrderItem orderItem) {
+    orderItemList.add(orderItem);
+    orderItem.setOrder(this);
+  }
+
   public void setDelivery(Delivery delivery) {
     this.delivery = delivery;
     delivery.setOrder(this);
@@ -72,15 +80,30 @@ public class Order {
   /**
    * 주문 생성
    * 주문 상태와 주문일시를 기본값 처리
-   * 
+   *
    * @param member
    * @param delivery
    * @param orderItems
    * @return
    */
-  public static Order createOrder(Member member, Delivery delivery, OrderItem... orderItems) {
-    return Order.builder().member(member).delivery(delivery).orderItemList(Arrays.asList(orderItems))
-        .orderStatus(OrderStatus.ORDER).orderDateTime(LocalDateTime.now()).build();
+  public static Order createOrder(
+    Member member,
+    Delivery delivery,
+    OrderItem... orderItems
+  ) {
+    Order order = Order
+      .builder()
+      .member(member)
+      .delivery(delivery)
+      .orderStatus(OrderStatus.ORDER)
+      .orderDateTime(LocalDateTime.now())
+      .build();
+
+    for (OrderItem orderItem : orderItems) {
+      order.addOrderItem(orderItem);
+    }
+
+    return order;
   }
 
   /**
@@ -89,7 +112,9 @@ public class Order {
    */
   public void cancelOrder() {
     if (delivery.getDeliveryStatus() == DeliveryStatus.DELIVERED) {
-      throw new IllegalStateException("이미 배송 완료된 상품은 취소가 불가능합니다.");
+      throw new IllegalStateException(
+        "이미 배송 완료된 상품은 취소가 불가능합니다."
+      );
     }
 
     this.setOrderStatus(OrderStatus.CANCEL);
@@ -103,10 +128,12 @@ public class Order {
 
   /**
    * 주문 총액 계산
-   * 
+   *
    * @return
    */
   public int getTotalPrice() {
-    return this.orderItemList.parallelStream().mapToInt(OrderItem::getTotalPrice).sum();
+    return this.orderItemList.parallelStream()
+      .mapToInt(OrderItem::getTotalPrice)
+      .sum();
   }
 }

@@ -11,7 +11,7 @@
           <select name="memberId" id="member" class="form-control">
             <option value="">회원선택</option>
             <option
-              th:each="member : ${members}"
+              th:each="member : ${memberList}"
               th:value="${member.id}"
               th:text="${member.name}"
             />
@@ -23,7 +23,7 @@
           <select name="itemId" id="item" class="form-control">
             <option value="">상품선택</option>
             <option
-              th:each="item : ${items}"
+              th:each="item : ${itemList}"
               th:value="${item.id}"
               th:text="${item.name}"
             />
