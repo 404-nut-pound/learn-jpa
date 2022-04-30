@@ -9,14 +9,15 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
+import lombok.AccessLevel;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 import lombok.Setter;
 
 @Entity
-@Getter
-@Setter
-@Builder
+@Data
+@Setter(value = AccessLevel.NONE)
+@Builder(toBuilder = true)
 public class Delivery {
 
   @Id
@@ -31,4 +32,8 @@ public class Delivery {
 
   @Enumerated(EnumType.STRING)
   private DeliveryStatus deliveryStatus;
+
+  public void setOrder(Order order) {
+    this.order = order;
+  }
 }

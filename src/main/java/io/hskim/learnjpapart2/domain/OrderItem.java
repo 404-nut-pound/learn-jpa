@@ -9,14 +9,15 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import io.hskim.learnjpapart2.domain.item.Item;
+import lombok.AccessLevel;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 import lombok.Setter;
 
 @Entity
-@Getter
-@Setter
-@Builder
+@Data
+@Setter(value = AccessLevel.NONE)
+@Builder(toBuilder = true)
 public class OrderItem {
 
   @Id
@@ -34,5 +35,35 @@ public class OrderItem {
 
   private int orderPrice;
 
-  private int count;
+  private int orderCount;
+
+  /**
+   * 주문 상품 정보 생성
+   * 
+   * @param item
+   * @param orderPrice
+   * @param orderCount
+   * @return
+   */
+  public static OrderItem craeteOrderItem(Item item, int orderPrice, int orderCount) {
+    item.removeStockQunatity(orderCount);
+
+    return OrderItem.builder().item(item).orderPrice(orderPrice).orderCount(orderCount).build();
+  }
+
+  /**
+   * 주문 취소시 재고 수량 증가
+   */
+  public void cancelOrderItem() {
+    this.item.addStockQuantity(this.orderCount);
+  }
+
+  /**
+   * 주문 총액 계싼
+   * 
+   * @return
+   */
+  public int getTotalPrice() {
+    return this.orderCount * this.orderPrice;
+  }
 }

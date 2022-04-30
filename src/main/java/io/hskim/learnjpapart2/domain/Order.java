@@ -2,6 +2,7 @@ package io.hskim.learnjpapart2.domain;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -18,13 +19,16 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import lombok.Getter;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Data;
 import lombok.Setter;
 
 @Entity
 @Table(name = "orders")
-@Getter
-@Setter
+@Data
+@Setter(value = AccessLevel.NONE)
+@Builder(toBuilder = true)
 public class Order {
 
   @Id
@@ -63,5 +67,46 @@ public class Order {
   public void setDelivery(Delivery delivery) {
     this.delivery = delivery;
     delivery.setOrder(this);
+  }
+
+  /**
+   * 주문 생성
+   * 주문 상태와 주문일시를 기본값 처리
+   * 
+   * @param member
+   * @param delivery
+   * @param orderItems
+   * @return
+   */
+  public static Order createOrder(Member member, Delivery delivery, OrderItem... orderItems) {
+    return Order.builder().member(member).delivery(delivery).orderItemList(Arrays.asList(orderItems))
+        .orderStatus(OrderStatus.ORDER).orderDateTime(LocalDateTime.now()).build();
+  }
+
+  /**
+   * 주문 취소 처리
+   * 이미 배송 시작했으면 취소 불가
+   */
+  public void cancelOrder() {
+    if (delivery.getDeliveryStatus() == DeliveryStatus.DELIVERED) {
+      throw new IllegalStateException("이미 배송 완료된 상품은 취소가 불가능합니다.");
+    }
+
+    this.setOrderStatus(OrderStatus.CANCEL);
+
+    this.orderItemList.forEach(orderItem -> orderItem.cancelOrderItem());
+  }
+
+  public void setOrderStatus(OrderStatus orderStatus) {
+    this.orderStatus = orderStatus;
+  }
+
+  /**
+   * 주문 총액 계산
+   * 
+   * @return
+   */
+  public int getTotalPrice() {
+    return this.orderItemList.parallelStream().mapToInt(OrderItem::getTotalPrice).sum();
   }
 }

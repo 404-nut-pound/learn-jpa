@@ -15,14 +15,15 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import io.hskim.learnjpapart2.domain.item.Item;
+import lombok.AccessLevel;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 import lombok.Setter;
 
 @Entity
-@Getter
-@Setter
-@Builder
+@Data
+@Setter(value = AccessLevel.NONE)
+@Builder(toBuilder = true)
 public class Category {
 
   @Id
@@ -48,5 +49,9 @@ public class Category {
   public void addChildCategory(Category category) {
     this.childList.add(category);
     category.setParent(this);
+  }
+
+  public void setParent(Category parent) {
+    this.parent = parent;
   }
 }

@@ -10,14 +10,15 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import lombok.AccessLevel;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 import lombok.Setter;
 
 @Entity
-@Getter
-@Setter
-@Builder
+@Data
+@Setter(value = AccessLevel.NONE)
+@Builder(toBuilder = true)
 public class Member {
 
   @Id
