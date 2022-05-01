@@ -32,7 +32,7 @@ public class OrderService {
     Delivery delivery = Delivery.builder().address(member.getAddress()).build();
 
     // 주문 상품 생성
-    OrderItem orderItem = OrderItem.craeteOrderItem(
+    OrderItem orderItem = OrderItem.createOrderItem(
       item,
       item.getPrice(),
       orderCount

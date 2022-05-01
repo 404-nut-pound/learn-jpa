@@ -47,7 +47,7 @@ public class OrderItem {
    * @param orderCount
    * @return
    */
-  public static OrderItem craeteOrderItem(
+  public static OrderItem createOrderItem(
     Item item,
     int orderPrice,
     int orderCount
