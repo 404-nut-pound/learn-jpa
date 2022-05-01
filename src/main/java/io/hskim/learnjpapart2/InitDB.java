@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Component
 @RequiredArgsConstructor
 public class InitDB {
+
   private final InitService initService;
 
   @PostConstruct
@@ -27,6 +28,7 @@ public class InitDB {
   @Transactional
   @RequiredArgsConstructor
   static class InitService {
+
     private final EntityManager em;
 
     public void dbInit1() {

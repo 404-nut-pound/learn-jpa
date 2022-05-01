@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/member/api")
 @RequiredArgsConstructor
 public class MemberApiController {
+
   private final MemberService memberService;
 
   @PostMapping
@@ -33,6 +34,7 @@ public class MemberApiController {
   @Data
   @AllArgsConstructor
   class CommonMemberResponse {
+
     private Long id;
 
     private String userName;

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 @RequiredArgsConstructor
 public class ItemRepository {
+
   private final EntityManager em;
 
   public void insertItem(Item item) {

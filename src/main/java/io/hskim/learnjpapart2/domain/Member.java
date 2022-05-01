@@ -23,6 +23,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Member {
+
   @Id
   @GeneratedValue
   @Column(name = "member_id")

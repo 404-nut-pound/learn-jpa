@@ -29,6 +29,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Item {
+
   @Id
   @GeneratedValue
   @Column(name = "item_id")

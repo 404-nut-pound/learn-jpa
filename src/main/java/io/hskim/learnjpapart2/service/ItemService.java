@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class ItemService {
+
   private final ItemRepository itemRepository;
 
   @Transactional

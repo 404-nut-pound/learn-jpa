@@ -31,6 +31,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Order {
+
   @Id
   @GeneratedValue
   @Column(name = "order_id")

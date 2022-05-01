@@ -22,6 +22,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrderItem {
+
   @Id
   @GeneratedValue
   @Column(name = "order_item_id")

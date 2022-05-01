@@ -22,6 +22,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Delivery {
+
   @Id
   @GeneratedValue
   @Column(name = "delivery_id")

@@ -1,8 +1,8 @@
 package io.hskim.learnjpapart2.domain;
 
+import io.hskim.learnjpapart2.domain.item.Item;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -13,8 +13,6 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-
-import io.hskim.learnjpapart2.domain.item.Item;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Data;
@@ -34,9 +32,11 @@ public class Category {
   private String name;
 
   @ManyToMany(fetch = FetchType.LAZY)
-  @JoinTable(name = "category_item" //
-      , joinColumns = @JoinColumn(name = "category_id") //
-      , inverseJoinColumns = @JoinColumn(name = "item_id")) //
+  @JoinTable(
+    name = "category_item",
+    joinColumns = @JoinColumn(name = "category_id"),
+    inverseJoinColumns = @JoinColumn(name = "item_id")
+  )
   private List<Item> itemList = new ArrayList<>();
 
   @ManyToOne(fetch = FetchType.LAZY)

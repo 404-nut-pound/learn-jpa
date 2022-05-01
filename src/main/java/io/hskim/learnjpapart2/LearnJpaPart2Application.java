@@ -9,5 +9,4 @@ public class LearnJpaPart2Application {
   public static void main(String[] args) {
     SpringApplication.run(LearnJpaPart2Application.class, args);
   }
-
 }

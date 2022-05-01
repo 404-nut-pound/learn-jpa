@@ -1,13 +1,11 @@
 package io.hskim.learnjpapart2.service;
 
-import java.util.List;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import io.hskim.learnjpapart2.domain.Member;
 import io.hskim.learnjpapart2.repository.MemberRepository;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 // 조회성 로직의 경우 readOnly를 설정하면 좀 더 최적화 가능

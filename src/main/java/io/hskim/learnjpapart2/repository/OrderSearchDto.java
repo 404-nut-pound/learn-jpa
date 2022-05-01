@@ -5,6 +5,7 @@ import lombok.Data;
 
 @Data
 public class OrderSearchDto {
+
   private String userName;
 
   private OrderStatus orderStatus;
