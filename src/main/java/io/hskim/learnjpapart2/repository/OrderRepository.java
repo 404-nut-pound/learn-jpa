@@ -11,6 +11,7 @@ import org.springframework.util.StringUtils;
 @Repository
 @RequiredArgsConstructor
 public class OrderRepository {
+
   private final EntityManager em;
 
   public void insertOrder(Order order) {
@@ -26,6 +27,11 @@ public class OrderRepository {
    * 해당 현상을 막기 위해 fetch join을 사용
    * FetchType.EAGER와 유사하지만 필요한 곳에만 사용할 수 있다는 장점이 있음
    * 사용 문법 - join -> join fetch
+   *
+   * 좀 더 최적화 하기 위해서 select 시 즉시 dto 생성자로 할당하여 처리
+   * 코드 균일화를 위해서는 비권장
+   * 쿼리가 복잡해서 필요해질 경우 repository 패키지가 아닌 별도로 생성하여 분리 권장
+   * 사용 문법 - select new Full Package.Class name(객체.값, 객체.값.....) from 객체
    *
    * @param orderSearchDto
    * @return
