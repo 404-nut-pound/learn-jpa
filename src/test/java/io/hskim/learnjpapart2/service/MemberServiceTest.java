@@ -3,16 +3,14 @@ package io.hskim.learnjpapart2.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import io.hskim.learnjpapart2.domain.Member;
+import io.hskim.learnjpapart2.repository.MemberRepositoryOld;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-
-import io.hskim.learnjpapart2.domain.Member;
-import io.hskim.learnjpapart2.repository.MemberRepository;
 
 @SpringBootTest
 @Transactional // 테스트 코드이므로 자동 롤백 설정
@@ -23,7 +21,7 @@ public class MemberServiceTest {
   MemberService memberService;
 
   @Autowired
-  MemberRepository memberRepository;
+  MemberRepositoryOld memberRepository;
 
   @Autowired
   EntityManager entityManager;
@@ -50,10 +48,11 @@ public class MemberServiceTest {
     // } catch (IllegalStateException e) {
     // return;
     // }
-    IllegalStateException thrownException = assertThrows(IllegalStateException.class,
-        () -> memberService.insertMember(memberB));
+    IllegalStateException thrownException = assertThrows(
+      IllegalStateException.class,
+      () -> memberService.insertMember(memberB)
+    );
     assertEquals("이미 존재하는 회원입니다.", thrownException.getMessage());
-
     // fail("중복 테스트 실패");
   }
 }
