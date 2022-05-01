@@ -22,6 +22,10 @@ public class OrderRepository {
     return em.find(Order.class, id);
   }
 
+  public List<Order> findAll() {
+    return em.createQuery("select o from Order o", Order.class).getResultList();
+  }
+
   /**
    * 일반 join을 사용하게 되면 fetch할 때마다 새로운 쿼리를 실행함
    * 해당 현상을 막기 위해 fetch join을 사용
@@ -32,6 +36,15 @@ public class OrderRepository {
    * 코드 균일화를 위해서는 비권장
    * 쿼리가 복잡해서 필요해질 경우 repository 패키지가 아닌 별도로 생성하여 분리 권장
    * 사용 문법 - select new Full Package.Class name(객체.값, 객체.값.....) from 객체
+   *
+   * join을 실행할 경우 중복 제거를 위해 distinct 사용(Entity 단위의 distinct 수행)
+   *
+   * 1:다 관계에서는 페이징 불가, 컬렉션이 포함됐을 경우 1개만 사용해야 데이터 부정합을 방지할 수 있음
+   * 컬렉션 데이터는 fetch join 사용 금지
+   *
+   * ~ToOne 관계에서는 모두 fetch join 사용
+   * 컬렉션이 있을 경우 개별 조회 후 병합
+   * spring.jpa.hibernate.default_batch_fetch_size 설정, 개별 설정은 엔티티의 컬렉션에 @BatchSize(int) 설정
    *
    * @param orderSearchDto
    * @return
@@ -74,6 +87,43 @@ public class OrderRepository {
     }
 
     return query.getResultList();
+  }
+
+  public List<Order> findAllWithMemberDelivery() {
+    return em
+      .createQuery(
+        "select o from Order o" +
+        " join fetch o.member m" +
+        " join fetch o.delivery d",
+        Order.class
+      )
+      .getResultList();
+  }
+
+  public List<Order> findAllWithItem() {
+    return em
+      .createQuery(
+        "select distinct o from Order o" +
+        " join fetch o.member m" +
+        " join fetch o.delivery d" +
+        " join fetch o.orderItems oi" +
+        " join fetch oi.item i",
+        Order.class
+      )
+      .getResultList();
+  }
+
+  public List<Order> findAllWithMemberDelivery(int offset, int limit) {
+    return em
+      .createQuery(
+        "select o from Order o" +
+        " join fetch o.member m" +
+        " join fetch o.delivery d",
+        Order.class
+      )
+      .setFirstResult(offset)
+      .setMaxResults(limit)
+      .getResultList();
   }
   /**
    * JPA Criteria
