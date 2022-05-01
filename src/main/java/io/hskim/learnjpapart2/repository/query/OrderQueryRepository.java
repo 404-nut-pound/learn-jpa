@@ -14,6 +14,21 @@ public class OrderQueryRepository {
   private final EntityManager em;
 
   /**
+   * 1:N 관계(컬렉션)를 제외한 나머지를 한번에 조회
+   */
+  private List<OrderQueryDto> findOrders() {
+    return em
+      .createQuery(
+        "select new jpabook.jpashop.repository.order.query.OrderQueryDto(o.id, m.name, o.orderDate, o.status, d.address)" +
+        " from Order o" +
+        " join o.member m" +
+        " join o.delivery d",
+        OrderQueryDto.class
+      )
+      .getResultList();
+  }
+
+  /**
    * 컬렉션은 별도로 조회
    * Query: 루트 1번, 컬렉션 N 번
    * 단건 조회에서 많이 사용하는 방식
@@ -48,6 +63,32 @@ public class OrderQueryRepository {
       .getResultList();
   }
 
+  private Map<Long, List<OrderItemQueryDto>> findOrderItemMap(
+    List<Long> orderIds
+  ) {
+    List<OrderItemQueryDto> orderItems = em
+      .createQuery(
+        "select new jpabook.jpashop.repository.order.query.OrderItemQueryDto(oi.order.id, i.name, oi.orderPrice, oi.count)" +
+        " from OrderItem oi" +
+        " join oi.item i" +
+        " where oi.order.id in :orderIds",
+        OrderItemQueryDto.class
+      )
+      .setParameter("orderIds", orderIds)
+      .getResultList();
+
+    return orderItems
+      .stream()
+      .collect(Collectors.groupingBy(OrderItemQueryDto::getOrderId));
+  }
+
+  private List<Long> toOrderIds(List<OrderQueryDto> result) {
+    return result
+      .stream()
+      .map(o -> o.getOrderId())
+      .collect(Collectors.toList());
+  }
+
   /**
    * 최적화
    * Query: 루트 1번, 컬렉션 1번
@@ -67,47 +108,6 @@ public class OrderQueryRepository {
     result.forEach(o -> o.setOrderItems(orderItemMap.get(o.getOrderId())));
 
     return result;
-  }
-
-  /**
-   * 1:N 관계(컬렉션)를 제외한 나머지를 한번에 조회
-   */
-  private List<OrderQueryDto> findOrders() {
-    return em
-      .createQuery(
-        "select new jpabook.jpashop.repository.order.query.OrderQueryDto(o.id, m.name, o.orderDate, o.status, d.address)" +
-        " from Order o" +
-        " join o.member m" +
-        " join o.delivery d",
-        OrderQueryDto.class
-      )
-      .getResultList();
-  }
-
-  private List<Long> toOrderIds(List<OrderQueryDto> result) {
-    return result
-      .stream()
-      .map(o -> o.getOrderId())
-      .collect(Collectors.toList());
-  }
-
-  private Map<Long, List<OrderItemQueryDto>> findOrderItemMap(
-    List<Long> orderIds
-  ) {
-    List<OrderItemQueryDto> orderItems = em
-      .createQuery(
-        "select new jpabook.jpashop.repository.order.query.OrderItemQueryDto(oi.order.id, i.name, oi.orderPrice, oi.count)" +
-        " from OrderItem oi" +
-        " join oi.item i" +
-        " where oi.order.id in :orderIds",
-        OrderItemQueryDto.class
-      )
-      .setParameter("orderIds", orderIds)
-      .getResultList();
-
-    return orderItems
-      .stream()
-      .collect(Collectors.groupingBy(OrderItemQueryDto::getOrderId));
   }
 
   public List<OrderFlatDto> findAllByDto_flat() {

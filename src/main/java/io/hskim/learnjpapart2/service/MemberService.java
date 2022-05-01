@@ -1,7 +1,7 @@
 package io.hskim.learnjpapart2.service;
 
 import io.hskim.learnjpapart2.domain.Member;
-import io.hskim.learnjpapart2.repository.MemberRepository;
+import io.hskim.learnjpapart2.repository.MemberRepositoryOld;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,7 +23,7 @@ public class MemberService {
   // this.memberRepository = memberRepository;
   // }
   // @Autowired
-  private final MemberRepository memberRepository;
+  private final MemberRepositoryOld memberRepository;
 
   @Transactional
   public Long insertMember(Member member) {

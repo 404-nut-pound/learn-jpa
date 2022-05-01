@@ -6,7 +6,7 @@ import io.hskim.learnjpapart2.domain.Order;
 import io.hskim.learnjpapart2.domain.OrderItem;
 import io.hskim.learnjpapart2.domain.item.Item;
 import io.hskim.learnjpapart2.repository.ItemRepository;
-import io.hskim.learnjpapart2.repository.MemberRepository;
+import io.hskim.learnjpapart2.repository.MemberRepositoryOld;
 import io.hskim.learnjpapart2.repository.OrderRepository;
 import io.hskim.learnjpapart2.repository.OrderSearchDto;
 import java.util.List;
@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class OrderService {
 
   private final OrderRepository orderRepository;
-  private final MemberRepository memberRepository;
+  private final MemberRepositoryOld memberRepository;
   private final ItemRepository itemRepository;
 
   @Transactional
