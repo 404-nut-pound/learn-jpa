@@ -21,8 +21,17 @@ public class OrderRepository {
     return em.find(Order.class, id);
   }
 
+  /**
+   * 일반 join을 사용하게 되면 fetch할 때마다 새로운 쿼리를 실행함
+   * 해당 현상을 막기 위해 fetch join을 사용
+   * FetchType.EAGER와 유사하지만 필요한 곳에만 사용할 수 있다는 장점이 있음
+   * 사용 문법 - join -> join fetch
+   *
+   * @param orderSearchDto
+   * @return
+   */
   public List<Order> findAllByCondition(OrderSearchDto orderSearchDto) {
-    String jpql = "select o from Order o join o.member m";
+    String jpql = "select o from Order o join fetch o.member m";
     boolean isFirstCondition = true;
 
     //주문 상태 검색
