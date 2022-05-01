@@ -34,6 +34,7 @@ public class Member {
   @Embedded
   private Address Address;
 
+  @Builder.Default
   @OneToMany(mappedBy = "member", fetch = FetchType.LAZY) // 양방향 매핑의 경우 연관 관계의 주도권이 없는 쪽에 mappedBy 설정
   private List<Order> orderList = new ArrayList<>();
 }

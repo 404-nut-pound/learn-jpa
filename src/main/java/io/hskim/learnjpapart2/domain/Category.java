@@ -31,6 +31,7 @@ public class Category {
 
   private String name;
 
+  @Builder.Default
   @ManyToMany(fetch = FetchType.LAZY)
   @JoinTable(
     name = "category_item",
@@ -43,6 +44,7 @@ public class Category {
   @JoinColumn(name = "parent_id")
   private Category parent;
 
+  @Builder.Default
   @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY)
   private List<Category> childList = new ArrayList<>();
 

@@ -15,6 +15,7 @@ import javax.persistence.InheritanceType;
 import javax.persistence.ManyToMany;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -41,6 +42,7 @@ public class Item {
 
   private int stockQuantity;
 
+  @Builder.Default
   @ManyToMany(mappedBy = "itemList", fetch = FetchType.LAZY)
   // List 타입은 초기화를 미리 하는 것이 좋음
   private List<Category> categoryList = new ArrayList<>();
