@@ -7,6 +7,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
+import javax.persistence.NamedQuery;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -21,6 +24,8 @@ import lombok.ToString;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString(of = { "id", "userName", "age" })
+@NamedQuery(name = "findByUserName", query = "select m from Member m where m.userName = :userName")
+@NamedEntityGraph(name = "Member.all", attributeNodes = @NamedAttributeNode(value = "team"))
 public class Member {
 
   @Id
