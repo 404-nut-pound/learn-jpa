@@ -1,11 +1,11 @@
 package io.hskim.learnjpapart3.repository;
 
+import io.hskim.learnjpapart3.dto.MemberDto;
+import io.hskim.learnjpapart3.entity.Member;
 import java.util.List;
 import java.util.Optional;
-
 import javax.persistence.LockModeType;
 import javax.persistence.QueryHint;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -16,10 +16,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.QueryHints;
 import org.springframework.data.repository.query.Param;
 
-import io.hskim.learnjpapart3.dto.MemberDto;
-import io.hskim.learnjpapart3.entity.Member;
-
-public interface MemberRepository extends JpaRepository<Member, Long> {
+public interface MemberRepository
+  extends JpaRepository<Member, Long>, MemberRepostoryCustom {
   public List<Member> findByUserNameAndAgeGreaterThan(String userName, int age);
 
   /**
@@ -38,7 +36,9 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
   @Query("select m.userName from Member m")
   List<String> findUserNameList();
 
-  @Query("select new io.hskim.learnjpapart3.dto.MemberDto(m.id, m.userName, t.teamName) from Member m join m.team t")
+  @Query(
+    "select new io.hskim.learnjpapart3.dto.MemberDto(m.id, m.userName, t.teamName) from Member m join m.team t"
+  )
   List<MemberDto> findMemberDto();
 
   @Query("select m from Member m where m.userName in :names")
@@ -58,7 +58,10 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
    * @param age
    * @return
    */
-  @Query(value = "select m from Member m", countQuery = "select count(m) from Member m")
+  @Query(
+    value = "select m from Member m",
+    countQuery = "select count(m) from Member m"
+  )
   Page<Member> findPagedMemberByAge(Pageable pageable, int age);
 
   /**
@@ -84,20 +87,21 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
   /**
    * Hibernate에서 제공하는 힌트 기능으로 쿼리 옵션 설정 가능
    * org.hibernate.readOnly - 읽기 전용으로 조회, 변경 감지 적용 안 됨
-   * 
+   *
    * @param userName
    * @return
    */
-  @QueryHints(value = { @QueryHint(name = "org.hibernate.readOnly", value = "true") })
+  @QueryHints(
+    value = { @QueryHint(name = "org.hibernate.readOnly", value = "true") }
+  )
   Member findReadOnlyMemberByUserName(String userName);
 
   /**
    * Lock 어노테이션으로 쿼리 옵션 추가 가능
-   * 
+   *
    * @param userName
    * @return
    */
   @Lock(LockModeType.PESSIMISTIC_READ)
   List<Member> findLockedMemberByUserName(String userName);
-
 }
