@@ -2,14 +2,12 @@ package io.hskim.learnjpapart3.repository;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import io.hskim.learnjpapart3.entity.Member;
 import java.util.List;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
-
-import io.hskim.learnjpapart3.entity.Member;
 
 @SpringBootTest
 @Transactional
@@ -39,7 +37,10 @@ public class MemberJpaRepositoryTest {
     jpaRepository.save(memberA);
     jpaRepository.save(memberB);
 
-    List<Member> resultList = jpaRepository.findByUserNameAndAgeGreaterThan("member", 10);
+    List<Member> resultList = jpaRepository.findByUserNameAndAgeGreaterThan(
+      "member",
+      10
+    );
 
     assertEquals(resultList.get(0).getUserName(), "member");
     assertEquals(resultList.get(0).getAge(), 20);

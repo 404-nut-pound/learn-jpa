@@ -2,12 +2,13 @@ package io.hskim.learnjpapart3.repository;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import io.hskim.learnjpapart3.dto.MemberDto;
+import io.hskim.learnjpapart3.entity.Member;
+import io.hskim.learnjpapart3.entity.Team;
 import java.util.List;
 import java.util.Optional;
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,10 +16,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
-
-import io.hskim.learnjpapart3.dto.MemberDto;
-import io.hskim.learnjpapart3.entity.Member;
-import io.hskim.learnjpapart3.entity.Team;
 
 @SpringBootTest
 @Transactional
@@ -54,7 +51,10 @@ public class MemberRepositoryTest {
     memberRepository.save(memberA);
     memberRepository.save(memberB);
 
-    List<Member> resultList = memberRepository.findByUserNameAndAgeGreaterThan("member", 10);
+    List<Member> resultList = memberRepository.findByUserNameAndAgeGreaterThan(
+      "member",
+      10
+    );
 
     assertEquals(resultList.get(0).getUserName(), "member");
     assertEquals(resultList.get(0).getAge(), 20);
@@ -79,7 +79,12 @@ public class MemberRepositoryTest {
 
     teamRepository.save(team);
 
-    Member memberA = Member.builder().userName("member").age(20).team(team).build();
+    Member memberA = Member
+      .builder()
+      .userName("member")
+      .age(20)
+      .team(team)
+      .build();
 
     memberRepository.save(memberA);
 
@@ -94,7 +99,10 @@ public class MemberRepositoryTest {
     memberRepository.save(memberA);
     memberRepository.save(memberB);
 
-    memberRepository.findByNames(List.of("memberA")).stream().forEach(System.out::println);
+    memberRepository
+      .findByNames(List.of("memberA"))
+      .stream()
+      .forEach(System.out::println);
   }
 
   @Test
@@ -104,7 +112,9 @@ public class MemberRepositoryTest {
     memberRepository.save(memberA);
 
     Member member = memberRepository.findMemberByUserName("memberA");
-    Optional<Member> optionalMember = memberRepository.findOptinalMemberByUserName("memberA");
+    Optional<Member> optionalMember = memberRepository.findOptinalMemberByUserName(
+      "memberA"
+    );
 
     assertEquals(member, optionalMember.get());
   }
@@ -119,9 +129,16 @@ public class MemberRepositoryTest {
 
     int age = 20;
 
-    PageRequest pageRequest = PageRequest.of(0, 2, Sort.by(Sort.Direction.DESC, "userName"));
+    PageRequest pageRequest = PageRequest.of(
+      0,
+      2,
+      Sort.by(Sort.Direction.DESC, "userName")
+    );
 
-    Page<Member> pagedMember = memberRepository.findPagedMemberByAge(pageRequest, age);
+    Page<Member> pagedMember = memberRepository.findPagedMemberByAge(
+      pageRequest,
+      age
+    );
 
     // Page 클래스 속성
     List<Member> content = pagedMember.getContent();
@@ -130,13 +147,16 @@ public class MemberRepositoryTest {
     content.stream().forEach(System.out::println);
     System.out.println("Total Count : %d".formatted(totalCount));
     System.out.println("Current Page : %d".formatted(pagedMember.getNumber()));
-    System.out.println("Total Pages : %d".formatted(pagedMember.getTotalPages()));
+    System.out.println(
+      "Total Pages : %d".formatted(pagedMember.getTotalPages())
+    );
     System.out.println("Is First? - %s".formatted(pagedMember.isFirst()));
     System.out.println("Has Next? - %s".formatted(pagedMember.hasNext()));
 
     // 속성 유지하면서 Dto로 변환
-    Page<MemberDto> pagedMemberDto = pagedMember
-        .map(member -> new MemberDto(member.getId(), member.getUserName(), null));
+    Page<MemberDto> pagedMemberDto = pagedMember.map(
+      member -> new MemberDto(member.getId(), member.getUserName(), null)
+    );
   }
 
   @Test
@@ -161,8 +181,18 @@ public class MemberRepositoryTest {
     teamRepository.save(teamA);
     teamRepository.save(teamB);
 
-    Member memberA = Member.builder().userName("memberA").age(20).team(teamA).build();
-    Member memberB = Member.builder().userName("memberB").age(20).team(teamB).build();
+    Member memberA = Member
+      .builder()
+      .userName("memberA")
+      .age(20)
+      .team(teamA)
+      .build();
+    Member memberB = Member
+      .builder()
+      .userName("memberB")
+      .age(20)
+      .team(teamB)
+      .build();
 
     memberRepository.save(memberA);
     memberRepository.save(memberB);
@@ -172,10 +202,21 @@ public class MemberRepositoryTest {
 
     List<Member> memberList = memberRepository.findAll();
 
-    memberList.stream().forEach(member -> System.out.println("member name - %s".formatted(member.getUserName())));
+    memberList
+      .stream()
+      .forEach(
+        member ->
+          System.out.println("member name - %s".formatted(member.getUserName()))
+      );
     System.out.println();
-    memberList.stream()
-        .forEach(member -> System.out.println("member team name - %s".formatted(member.getTeam().getTeamName())));
+    memberList
+      .stream()
+      .forEach(
+        member ->
+          System.out.println(
+            "member team name - %s".formatted(member.getTeam().getTeamName())
+          )
+      );
   }
 
   @Test
@@ -197,4 +238,8 @@ public class MemberRepositoryTest {
     em.flush();
   }
 
+  @Test
+  void testCustom() {
+    memberRepository.findMemberCustom();
+  }
 }

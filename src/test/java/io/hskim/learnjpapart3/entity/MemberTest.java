@@ -1,10 +1,8 @@
 package io.hskim.learnjpapart3.entity;
 
 import java.util.List;
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,7 +39,9 @@ public class MemberTest {
     em.flush();
     em.clear();
 
-    List<Member> memberList = em.createQuery("select m from Member m", Member.class).getResultList();
+    List<Member> memberList = em
+      .createQuery("select m from Member m", Member.class)
+      .getResultList();
 
     for (Member member : memberList) {
       System.out.println("Member - %s".formatted(member));

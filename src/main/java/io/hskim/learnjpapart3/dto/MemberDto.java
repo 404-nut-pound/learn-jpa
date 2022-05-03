@@ -14,5 +14,4 @@ public class MemberDto {
   private String userName;
 
   private String teamName;
-
 }
