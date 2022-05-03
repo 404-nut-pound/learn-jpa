@@ -14,6 +14,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
@@ -23,6 +24,7 @@ import lombok.ToString;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString(of = { "id", "userName", "age" })
+@EqualsAndHashCode(callSuper = false)
 @NamedQuery(
   name = "findByUserName",
   query = "select m from Member m where m.userName = :userName"
@@ -31,7 +33,7 @@ import lombok.ToString;
   name = "Member.all",
   attributeNodes = @NamedAttributeNode(value = "team")
 )
-public class Member extends JpaBaseEntity {
+public class Member extends BaseEntity {
 
   @Id
   @GeneratedValue

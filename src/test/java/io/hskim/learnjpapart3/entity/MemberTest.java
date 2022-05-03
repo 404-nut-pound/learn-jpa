@@ -1,9 +1,11 @@
 package io.hskim.learnjpapart3.entity;
 
+import io.hskim.learnjpapart3.repository.MemberRepository;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,6 +15,9 @@ public class MemberTest {
 
   @PersistenceContext
   EntityManager em;
+
+  @Autowired
+  MemberRepository memberRepository;
 
   @Test
   void testEntity() {
@@ -51,9 +56,31 @@ public class MemberTest {
   }
 
   @Test
-  void baseEntity() {
-    em.persist(Member.builder().userName("memberA").age(20).build());
+  void baseEntity() throws InterruptedException {
+    Member memberA = Member.builder().userName("memberA").build();
+
+    memberRepository.save(memberA);
+
+    Thread.sleep(1000);
+
+    memberA.setAge(20);
 
     em.flush();
+    em.clear();
+
+    Member findMember = memberRepository.findById(memberA.getId()).get();
+
+    System.out.println(
+      "findMember.getRegId() - %s".formatted(findMember.getRegId())
+    );
+    System.out.println(
+      "findMember.getRegDt() - %s".formatted(findMember.getRegDt())
+    );
+    System.out.println(
+      "findMember.getModId() - %s".formatted(findMember.getModId())
+    );
+    System.out.println(
+      "findMember.getModDt() - %s".formatted(findMember.getModDt())
+    );
   }
 }
