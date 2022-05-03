@@ -17,6 +17,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.springframework.data.domain.Persistable;
 
 @Entity
 @Data
@@ -33,7 +34,7 @@ import lombok.ToString;
   name = "Member.all",
   attributeNodes = @NamedAttributeNode(value = "team")
 )
-public class Member extends BaseEntity {
+public class Member extends BaseEntity implements Persistable<Long> {
 
   @Id
   @GeneratedValue
@@ -51,5 +52,12 @@ public class Member extends BaseEntity {
   public void changeTeam(Team team) {
     this.team = team;
     team.getMemberList().add(this);
+  }
+
+  //일반 repository의 save를 사용할 때 merge로 작동하면 성능이 저하됨(select 과정 추가됨)
+  //Persistable 인터페이스를 구현하여 해당 객체가 isNew 상태인지 처리하면 좀 더 나은 성능을 기대할 수 있음
+  @Override
+  public boolean isNew() {
+    return super.getRegDt() == null;
   }
 }
