@@ -31,7 +31,7 @@ import lombok.ToString;
   name = "Member.all",
   attributeNodes = @NamedAttributeNode(value = "team")
 )
-public class Member {
+public class Member extends JpaBaseEntity {
 
   @Id
   @GeneratedValue

@@ -49,4 +49,11 @@ public class MemberTest {
       System.out.println();
     }
   }
+
+  @Test
+  void baseEntity() {
+    em.persist(Member.builder().userName("memberA").age(20).build());
+
+    em.flush();
+  }
 }
