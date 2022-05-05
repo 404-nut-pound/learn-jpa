@@ -5,36 +5,35 @@ import static io.hskim.learnjpapart4.entity.QTeam.team;
 import static org.springframework.util.StringUtils.hasText;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import io.hskim.learnjpapart4.common.dto.MemberSearchCondition;
 import io.hskim.learnjpapart4.common.dto.MemberTeamDto;
 import io.hskim.learnjpapart4.common.dto.QMemberTeamDto;
+import io.hskim.learnjpapart4.entity.Member;
 import java.util.List;
-import lombok.RequiredArgsConstructor;
+import javax.persistence.EntityManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.data.support.PageableExecutionUtils;
 
-@RequiredArgsConstructor
-public class MemberRepositoryImpl implements MemberRepositoryCustom {
+public class MemberRepositoryImpl
+  extends QuerydslRepositorySupport
+  implements MemberRepositoryCustom {
 
   private final JPAQueryFactory queryFactory;
 
+  public MemberRepositoryImpl(EntityManager em) {
+    super(Member.class);
+    this.queryFactory = new JPAQueryFactory(em);
+  }
+
   @Override
   public List<MemberTeamDto> search(MemberSearchCondition condition) {
-    return queryFactory
-      .select(
-        new QMemberTeamDto(
-          member.id.as("memberId"),
-          member.userName,
-          member.age,
-          team.id.as("teamId"),
-          team.teamName.as("teamName")
-        )
-      )
-      .from(member)
+    return from(member)
       .leftJoin(member.team, team)
       .where(
         userNameEq(condition.getUserName()),
@@ -42,7 +41,35 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
         ageGoe(condition.getAgeGoe()),
         ageLoe(condition.getAgeLoe())
       )
+      .select(
+        new QMemberTeamDto(
+          member.id,
+          member.userName,
+          member.age,
+          team.id,
+          team.teamName
+        )
+      )
       .fetch();
+    // return queryFactory
+    //   .select(
+    //     new QMemberTeamDto(
+    //       member.id.as("memberId"),
+    //       member.userName,
+    //       member.age,
+    //       team.id.as("teamId"),
+    //       team.teamName.as("teamName")
+    //     )
+    //   )
+    //   .from(member)
+    //   .leftJoin(member.team, team)
+    //   .where(
+    //     userNameEq(condition.getUserName()),
+    //     teamNameEq(condition.getTeamName()),
+    //     ageGoe(condition.getAgeGoe()),
+    //     ageLoe(condition.getAgeLoe())
+    //   )
+    //   .fetch();
   }
 
   private BooleanExpression userNameEq(String userName) {
@@ -69,16 +96,28 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
     MemberSearchCondition condition,
     Pageable pageable
   ) {
-    List<MemberTeamDto> memberTeamDtoList = queryFactory
-      .select(
-        new QMemberTeamDto(
-          member.id.as("memberId"),
-          member.userName,
-          member.age,
-          team.id.as("teamId"),
-          team.teamName.as("teamName")
-        )
-      )
+    // List<MemberTeamDto> memberTeamDtoList = queryFactory
+    //   .select(
+    //     new QMemberTeamDto(
+    //       member.id.as("memberId"),
+    //       member.userName,
+    //       member.age,
+    //       team.id.as("teamId"),
+    //       team.teamName.as("teamName")
+    //     )
+    //   )
+    //   .from(member)
+    //   .leftJoin(member.team, team)
+    //   .where(
+    //     userNameEq(condition.getUserName()),
+    //     teamNameEq(condition.getTeamName()),
+    //     ageGoe(condition.getAgeGoe()),
+    //     ageLoe(condition.getAgeLoe())
+    //   )
+    //   .offset(pageable.getOffset())
+    //   .limit(pageable.getPageSize())
+    //   .fetch();
+    JPQLQuery<MemberTeamDto> memberTeamDtoListQuery = from(member)
       .from(member)
       .leftJoin(member.team, team)
       .where(
@@ -87,8 +126,18 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
         ageGoe(condition.getAgeGoe()),
         ageLoe(condition.getAgeLoe())
       )
-      .offset(pageable.getOffset())
-      .limit(pageable.getPageSize())
+      .select(
+        new QMemberTeamDto(
+          member.id.as("memberId"),
+          member.userName,
+          member.age,
+          team.id.as("teamId"),
+          team.teamName.as("teamName")
+        )
+      );
+
+    List<MemberTeamDto> memberTeamDtoList = getQuerydsl()
+      .applyPagination(pageable, memberTeamDtoListQuery)
       .fetch();
 
     return new PageImpl<>(
@@ -98,6 +147,7 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
     );
   }
 
+  //QuerydslRepositorySupport 사용시 select가 아니라 from부터 시작해야 함
   @Override
   public Page<MemberTeamDto> searchPageComplex(
     MemberSearchCondition condition,
